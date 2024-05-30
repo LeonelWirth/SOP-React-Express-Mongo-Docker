@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: ./frontend  # Path to the directory containing the Dockerfile
+      dockerfile: Dockerfile
+    # image: frontend  # Change this to your desired image name
+    ports:
+      - "5173:5173"
+    # Add other configuration options as needed
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    # image: my-custom-backend-image:latest  # Change this to your desired image name
+    ports:
+      - "5000:5000"  # Assuming your backend runs on port 5000
+    environment:
+      MONGO_URI: mongodb://mongo:27017/my_database  # Update with your MongoDB connection string
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
